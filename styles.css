@@ -1,12 +1,61 @@
+html {
+	background-color: #222222;
+	color: white;
+	font-family: 'Orbitron', sans-serif;
+}
+
 #gameGrid {
   float:left;
 width:600px;
 height:600px;
-border: 3px solid red;
+border: 3px solid #FAE104;
+border-collapse: collapse;
+margin-right: 10px;
 }
-#gameGrid td{
-border: 3px solid red;
+#gameGrid tr td{
+border: 3px solid #FAE104;
 }
 #gameGrid tr{
-border: 3px solid red;
+border: 3px solid #FAE104;
+}
+
+.AgentPink {
+	background-color: #EA3297;
+}
+
+.AgentGreen {
+	background-color: #047564;
+}
+
+output {
+  position: absolute;
+  background-image: linear-gradient(top, #444444, #999999);
+  width: 40px;
+  height: 30px;
+  text-align: center;
+  color: white;
+  border-radius: 10px;
+  display: inline-block;
+  font: bold 15px/30px Georgia;
+  bottom: 175%;
+  left: 0;
+  margin-left: -1%;
+}
+output:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 10px solid #999999;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  margin-top: -1px;
+}
+
+label{
+	display:inline-block;
+	width:30px;
 }

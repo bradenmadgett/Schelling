@@ -1,67 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<meta name="description" content="A simulation of Thomas Schelling’s segregation model. In 1971, the American economist Thomas Schelling created an agent-based model that helped explain why segregation is so difficult to combat. His “model of segregation” showed that even when individuals (or “agents”) didn't mind being surrounded or living by agents of a different race, they would still choose to segregate themselves from other agents over time! Although the model is quite simple, it gives a fascinating look at how individuals might self-segregate, even when they have no explicit desire to do so.">
+	<meta name="author" content="Adam Hammond & Braden Madgett">
+  <link href='https://fonts.googleapis.com/css?family=Orbitron:500' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="styles.css">
   <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>-->
+  <script>
+  	  SEGWAGATION = {
+		  updateGridSize: function(size) {
+			  var $gameGrid = $('#gameGrid');
+			  $gameGrid.empty();
+			  for (var i = 0; i < size; ++i) {
+				  $gameGrid.append('<tr></tr>');
+				  for (var j = 0; j < size; ++j) {
+					  $('#gameGrid tr:last').append('<td></td>');
+				  }
+			  }
+		  },
+
+			setAgents: function(){
+				var $sizeSlider = $('#size');
+				var $emptySlider = $('#empty');
+				var $greenPinkRatioSlider = $('#green-pink-ratio');
+
+				var totalSpaces = $sizeSlider.val() * $sizeSlider.val();
+				var emptySpacesCount = Math.floor(($emptySlider.val()/100)*totalSpaces);
+				var totalAgentsCount = totalSpaces-emptySpacesCount;
+
+				var pinkAgentsCount = Math.floor(($greenPinkRatioSlider.val()/100)*totalAgentsCount);
+				var greenAgentsCount = totalAgentsCount - pinkAgentsCount;
+
+				var vacantPositions = new Array();
+				for (var k = 0; k < totalSpaces; ++k) {
+					vacantPositions.push(k);
+				}
+
+
+				for (var l = 0; l < greenAgentsCount; ++l) {
+					var random = Math.floor(Math.random() * vacantPositions.length);
+					$('td:eq(' + vacantPositions[random] + ')').addClass('AgentGreen');
+					vacantPositions = $.grep(vacantPositions, function(value) {
+						  return value != vacantPositions[random];
+					});
+				}
+
+
+				for (var m = 0; m < pinkAgentsCount; ++m) {
+					var random = Math.floor(Math.random() * vacantPositions.length);
+					$('td:eq(' + vacantPositions[random] + ')').addClass('AgentPink');
+					vacantPositions = $.grep(vacantPositions, function(value) {
+						  return value != vacantPositions[random];
+					});
+				}
+			},
+
+			redrawGrid: function(){
+				this.updateGridSize($('#size').val());
+				this.setAgents();
+			}
+		}
+
+	  $(document).ready(function() {
+		   SEGWAGATION.redrawGrid();
+
+		   var $gameGrid = $("#gameGrid");
+		   var $similarSlider = $('#similar');
+			var $greenPinkRatioSlider = $('#green-pink-ratio');
+			var $emptySlider = $("#empty");
+			var $delaySlider = $("#delay");
+			var $sizeSlider = $("#size");
+
+			var $lblSimilar = $('#lblsimilar');
+			var $lblGreenPinkRatio = $("#lblgreen-pink-ratio");
+			var $lblEmpty = $("#lblempty");
+			var $lblDelay = $("#lbldelay");
+			var $lblSize = $("#lblsize");
+
+			$lblSimilar.text($similarSlider.val());
+         $lblGreenPinkRatio.text($greenPinkRatioSlider.val());
+			$lblEmpty.text($emptySlider.val());
+			$lblDelay.text($delaySlider.val());
+			$lblSize.text($sizeSlider.val());
+
+			$sizeSlider.change(function() {
+				$lblSize.text($sizeSlider.val());
+				SEGWAGATION.redrawGrid();
+			});
+
+			$greenPinkRatioSlider.change(function() {
+				$lblGreenPinkRatio.text($greenPinkRatioSlider.val());
+				SEGWAGATION.redrawGrid();
+			});
+
+			$emptySlider.change(function() {
+				$lblEmpty.text($emptySlider.val());
+				SEGWAGATION.redrawGrid();
+			});
+	  });
+
+  </script>
+
 </head>
 <body>
   <table id="gameGrid">
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
   </table>
-  <input id="similar" type="range" data-show-value="true">Percent Similar
+
+  <label id="lblsimilar" text=""></label>&#09;
+  <input id="similar" type="range" value="50" data-show-value="true">&#09;&nbsp;Percent Similar
   <br>
-  <input id="red-blue-ratio" type="range" data-show-value="true">Red/Blue
+  <label id="lblgreen-pink-ratio" text=""></label>&#09;
+  <input id="green-pink-ratio" type="range" value="50" data-show-value="true">&#09;&nbsp;Green/Pink
   <br>
-  <input id="empty" type="range" data-show-value="true">Percent Empty
+  <label id="lblempty" text=""></label>&#09;
+  <input id="empty" type="range" value="50" data-show-value="true">&#09;&nbsp;Percent Empty
   <br>
-  <input id="size" type="range" data-show-value="true" min="10" max="50">Grid Size
+  <label id="lblsize" text=""></label>&#09;
+  <input id="size" type="range" value="10" data-show-value="true" min="10" max="50">&#09;&nbsp;Grid Size
   <br>
-  <input id="delay" type="range" data-show-value="true" min="0" max="30">Round Delay
-  <br>
+  <label id="lbldelay" text=""></label>&#09;
+  <input id="delay" type="range" value="15" data-show-value="true" min="0" max="30">&#09;&nbsp;Round Delay
+  <br /> <br />
   <button id="reset">Reset</button>
   <button id="start">Start</button>
   <button id="stop">Stop</button>
   <button id="step">Step</button>
 
-  <script>
-   var $sizeSlider = $("#size");
-   $sizeSlider.click(function(){
-     $(this).attr("max","value");
-   })
-  </script>
+
 </body>
 </html>
