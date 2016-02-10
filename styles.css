@@ -1,0 +1,12 @@
+#gameGrid {
+  float:left;
+width:600px;
+height:600px;
+border: 3px solid red;
+}
+#gameGrid td{
+border: 3px solid red;
+}
+#gameGrid tr{
+border: 3px solid red;
+}

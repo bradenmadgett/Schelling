@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+</head>
+<body>
+  <table id="gameGrid">
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+  <input id="similar" type="range" data-show-value="true">Percent Similar
+  <br>
+  <input id="red-blue-ratio" type="range" data-show-value="true">Red/Blue
+  <br>
+  <input id="empty" type="range" data-show-value="true">Percent Empty
+  <br>
+  <input id="size" type="range" data-show-value="true" min="10" max="50">Grid Size
+  <br>
+  <input id="delay" type="range" data-show-value="true" min="0" max="30">Round Delay
+  <br>
+  <button id="reset">Reset</button>
+  <button id="start">Start</button>
+  <button id="stop">Stop</button>
+  <button id="step">Step</button>
+
+  <script>
+   var $sizeSlider = $("#size");
+   $sizeSlider.click(function(){
+     $(this).attr("max","value");
+   })
+  </script>
+</body>
+</html>
