@@ -60,6 +60,77 @@
 			redrawGrid: function(){
 				this.updateGridSize($('#size').val());
 				this.setAgents();
+			},
+
+			startSimulation: function() {
+				var size = $("#size").val();
+
+				for (var i = 0; i < size; ++i)
+				{
+					var $row = $("#gameGrid tr:eq(" + i + ")");
+					for (var j = 0; j < size; ++j)
+					{
+						var $curSpace = $row.children('td:eq(' + j + ')');
+						if ($curSpace.hasClass('AgentPink')	|| $curSpace.hasClass('AgentGreen')) {
+							var similarNeighborCount = 0;
+							var totalNeighborCount = 0;
+							var $curSpaceAgentType;
+							if ($curSpace.hasClass('AgentPink')) {
+								$curSpaceAgentType = 'pink';
+							}
+							else {
+								$curSpaceAgentType = 'green';
+							}
+
+							for (var k = -1; k <= 1; ++k) {
+								for (var l = -1; l <= 1; ++l)	{
+									var adjacentRow = i + k;
+									var adjacentCol = j + l;
+
+									if (!(k == 0 && l == 0) && adjacentRow >= 0 && adjacentRow < size && adjacentCol >= 0 && adjacentCol < size) {
+										var $neighbor = $('#gameGrid tr:eq(' + adjacentRow + ')').children('td:eq(' + adjacentCol + ')');
+										if ($neighbor.hasClass('AgentGreen') || $neighbor.hasClass('AgentPink')) {
+											totalNeighborCount++;
+											if ($neighbor.hasClass('AgentGreen') && $curSpaceAgentType == 'green') {
+												similarNeighborCount++;
+											}
+											if ($neighbor.hasClass('AgentPink') && $curSpaceAgentType == 'pink') {
+												similarNeighborCount++;
+											}
+										}
+									}
+								}
+							}
+
+							similarSliderVal = $('#similar').val();
+							if (totalNeighborCount > 0) {
+								curSpaceSatisfactionVal = (similarNeighborCount / totalNeighborCount) * 100;
+								if (curSpaceSatisfactionVal < similarSliderVal) {
+									$curSpace.addClass('Dissatisfied');
+								}
+							}
+						}
+					}
+				}
+
+				var $dissatisfiedAgents = $('.Dissatisfied');
+
+				for (var m = 0; m < $dissatisfiedAgents.length; ++m) {
+					var curDissatisfiedAgentType;
+					if ($dissatisfiedAgents.eq(m).hasClass('AgentGreen')) {
+						curDissatisfiedAgentType = 'AgentGreen';
+						$dissatisfiedAgents.eq(m).removeClass('AgentGreen');
+					}
+					else {
+						curDissatisfiedAgentType = 'AgentPink';
+						$dissatisfiedAgents.eq(m).removeClass('AgentPink');
+					}
+
+					var $vacantPositions = $('#gameGrid td:not(.AgentGreen):not(.AgentPink)');
+					$moveToPosition = $vacantPositions.eq(Math.floor(Math.random() * $vacantPositions.length));
+					$moveToPosition.addClass(curDissatisfiedAgentType);
+					$dissatisfiedAgents.eq(m).removeClass('Dissatisfied');
+				}
 			}
 		}
 
@@ -99,6 +170,24 @@
 				$lblEmpty.text($emptySlider.val());
 				SEGWAGATION.redrawGrid();
 			});
+
+			$similarSlider.change(function() {
+				$lblSimilar.text($similarSlider.val());
+			})
+
+			$delaySlider.change(function() {
+				$lblDelay.text($delaySlider.val());
+			})
+
+
+			$('#reset').click(function() {
+				SEGWAGATION.redrawGrid();
+			});
+
+			$('#start').click(function() {
+				SEGWAGATION.startSimulation();
+			});
+
 	  });
 
   </script>
