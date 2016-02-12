@@ -62,6 +62,24 @@
 				this.setAgents();
 			},
 
+			startTimer: function(timer){
+					if(timer == null)
+					{
+					timer = setInterval(this.startSimulation, $('#delay').val()*100);
+				  }
+					return timer;
+			},
+
+      stopTimer: function(timer)
+			{
+				if(timer != null)
+				{
+					clearInterval(timer);
+					timer = null;
+				}
+				return timer;
+			},
+
 			startSimulation: function() {
 				var size = $("#size").val();
 
@@ -136,6 +154,7 @@
 
 	  $(document).ready(function() {
 		   SEGWAGATION.redrawGrid();
+			 var timer = null;
 
 		   var $gameGrid = $("#gameGrid");
 		   var $similarSlider = $('#similar');
@@ -184,9 +203,17 @@
 				SEGWAGATION.redrawGrid();
 			});
 
-			$('#start').click(function() {
+			$('#step').click(function() {
 				SEGWAGATION.startSimulation();
 			});
+
+			$('#start').click(function(){
+				timer = SEGWAGATION.startTimer(timer);
+			})
+
+			$('#stop').click(function(){
+				timer = SEGWAGATION.stopTimer(timer);
+			})
 
 	  });
 
