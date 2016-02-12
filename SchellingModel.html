@@ -65,7 +65,7 @@
 			startTimer: function(timer){
 					if(timer == null)
 					{
-					timer = setInterval(this.startSimulation, $('#delay').val()*100);
+					timer = setInterval(this.startSimulation(timer), $('#delay').val()*100);
 					$('#similar').prop("disabled", true);
 					$('#green-pink-ratio').prop("disabled", true);
 					$('#empty').prop("disabled", true);
@@ -97,7 +97,7 @@
 				return timer;
 			},
 
-			startSimulation: function() {
+			startSimulation: function(timer) {
 				var size = $("#size").val();
 
 				for (var i = 0; i < size; ++i)
@@ -187,50 +187,60 @@
 			var $lblSize = $("#lblsize");
 
 			$lblSimilar.text($similarSlider.val());
-         $lblGreenPinkRatio.text($greenPinkRatioSlider.val());
+      $lblGreenPinkRatio.text($greenPinkRatioSlider.val());
 			$lblEmpty.text($emptySlider.val());
 			$lblDelay.text($delaySlider.val());
 			$lblSize.text($sizeSlider.val());
 
-			$sizeSlider.change(function() {
-				$lblSize.text($sizeSlider.val());
-				SEGWAGATION.redrawGrid();
+			$sizeSlider.on( 'input', function(event) {
+    			$lblSize.html( $sizeSlider.val() );
+
 			});
 
-			$greenPinkRatioSlider.change(function() {
-				$lblGreenPinkRatio.text($greenPinkRatioSlider.val());
-				SEGWAGATION.redrawGrid();
-			});
-
-			$emptySlider.change(function() {
-				$lblEmpty.text($emptySlider.val());
-				SEGWAGATION.redrawGrid();
-			});
-
-			$similarSlider.change(function() {
-				$lblSimilar.text($similarSlider.val());
+			$sizeSlider.change(function(){
+					SEGWAGATION.redrawGrid();
 			})
 
-			$delaySlider.change(function() {
-				$lblDelay.text($delaySlider.val());
-			})
+			$greenPinkRatioSlider.on( 'input', function(event) {
+    			$lblGreenPinkRatio.html( $greenPinkRatioSlider.val() );
+			});
+
+			$greenPinkRatioSlider.change(function(){
+					SEGWAGATION.redrawGrid();
+			});
+
+			$emptySlider.on( 'input', function(event) {
+    			$lblEmpty.html( $emptySlider.val() );
+  		});
+
+			$emptySlider.change(function(){
+					SEGWAGATION.redrawGrid();
+			});
+
+			$similarSlider.on( 'input', function(event) {
+    			$lblSimilar.html( $similarSlider.val() );
+  		});
+
+			$delaySlider.on( 'input', function(event) {
+    			$lblDelay.html( $delaySlider.val() );
+  		});
 
 
 			$('#reset').click(function() {
-				SEGWAGATION.redrawGrid();
-				timer = SEGWAGATION.stopTimer(timer);
+					SEGWAGATION.redrawGrid();
+					timer = SEGWAGATION.stopTimer(timer);
 			});
 
 			$('#step').click(function() {
-				SEGWAGATION.startSimulation();
+					SEGWAGATION.startSimulation();
 			});
 
 			$('#start').click(function(){
-				timer = SEGWAGATION.startTimer(timer);
+					timer = SEGWAGATION.startTimer(timer);
 			})
 
 			$('#stop').click(function(){
-				timer = SEGWAGATION.stopTimer(timer);
+					timer = SEGWAGATION.stopTimer(timer);
 			})
 
 	  });
