@@ -65,7 +65,7 @@
 			startTimer: function(timer){
 					if(timer == null)
 					{
-					timer = setInterval(this.startSimulation(timer), $('#delay').val()*100);
+					timer = setInterval(this.startSimulation, $('#delay').val()*100);
 					$('#similar').prop("disabled", true);
 					$('#green-pink-ratio').prop("disabled", true);
 					$('#empty').prop("disabled", true);
@@ -97,7 +97,7 @@
 				return timer;
 			},
 
-			startSimulation: function(timer) {
+			startSimulation: function() {
 				var size = $("#size").val();
 
 				for (var i = 0; i < size; ++i)
