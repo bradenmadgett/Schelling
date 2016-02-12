@@ -10,6 +10,8 @@
   <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>-->
   <script>
   	  SEGWAGATION = {
+      roundCount: 0,
+
 		  updateGridSize: function(size) {
 			  var $gameGrid = $('#gameGrid');
 			  $gameGrid.empty();
@@ -60,6 +62,9 @@
 			redrawGrid: function(){
 				this.updateGridSize($('#size').val());
 				this.setAgents();
+				roundCount = 0;
+				$('#roundLabel').text(roundCount);
+				$('#step').prop("disabled", false);
 			},
 
 			startTimer: function(timer){
@@ -149,6 +154,29 @@
 				}
 
 				var $dissatisfiedAgents = $('.Dissatisfied');
+				var totalSpaces = $('#size').val() * $('#size').val();
+				var emptySpacesCount = Math.floor(($('#empty').val()/100)*totalSpaces);
+				var totalAgentsCount = totalSpaces-emptySpacesCount;
+
+				var percentDissatisfied = ($dissatisfiedAgents.length/totalAgentsCount)*100;
+
+				$('#percent').text(percentDissatisfied.toFixed(2) + "%");
+
+				if($dissatisfiedAgents.length == 0)
+				{
+						$('#stop').trigger("click");
+						if($('#step').prop("disabled") === true)
+						{
+							roundCount++;
+							$('#roundLabel').text(roundCount);
+					  }
+						$('#step').prop("disabled", true);
+
+				}
+				else{
+					roundCount++;
+					$('#roundLabel').text(roundCount);
+			  }
 
 				for (var m = 0; m < $dissatisfiedAgents.length; ++m) {
 					var curDissatisfiedAgentType;
@@ -170,80 +198,82 @@
 		}
 
 	  $(document).ready(function() {
-		   SEGWAGATION.redrawGrid();
-			 var timer = null;
+		    SEGWAGATION.redrawGrid();
+				var timer = null;
+				var roundCount = 0;
 
-		   var $gameGrid = $("#gameGrid");
-		   var $similarSlider = $('#similar');
-			var $greenPinkRatioSlider = $('#green-pink-ratio');
-			var $emptySlider = $("#empty");
-			var $delaySlider = $("#delay");
-			var $sizeSlider = $("#size");
+			  var $gameGrid = $("#gameGrid");
+			  var $similarSlider = $('#similar');
+				var $greenPinkRatioSlider = $('#green-pink-ratio');
+				var $emptySlider = $("#empty");
+				var $delaySlider = $("#delay");
+				var $sizeSlider = $("#size");
 
-			var $lblSimilar = $('#lblsimilar');
-			var $lblGreenPinkRatio = $("#lblgreen-pink-ratio");
-			var $lblEmpty = $("#lblempty");
-			var $lblDelay = $("#lbldelay");
-			var $lblSize = $("#lblsize");
+				var $lblSimilar = $('#lblsimilar');
+				var $lblGreenPinkRatio = $("#lblgreen-pink-ratio");
+				var $lblEmpty = $("#lblempty");
+				var $lblDelay = $("#lbldelay");
+				var $lblSize = $("#lblsize");
+				var $lblRound = $("#round");
 
-			$lblSimilar.text($similarSlider.val());
-      $lblGreenPinkRatio.text($greenPinkRatioSlider.val());
-			$lblEmpty.text($emptySlider.val());
-			$lblDelay.text($delaySlider.val());
-			$lblSize.text($sizeSlider.val());
+				$lblSimilar.text($similarSlider.val());
+	      $lblGreenPinkRatio.text($greenPinkRatioSlider.val());
+				$lblEmpty.text($emptySlider.val());
+				$lblDelay.text($delaySlider.val());
+				$lblSize.text($sizeSlider.val());
 
-			$sizeSlider.on( 'input', function(event) {
-    			$lblSize.html( $sizeSlider.val() );
+				$sizeSlider.on( 'input', function(event) {
+	    			$lblSize.html( $sizeSlider.val() );
 
-			});
+				});
 
-			$sizeSlider.change(function(){
-					SEGWAGATION.redrawGrid();
-			})
+				$sizeSlider.change(function(){
+						SEGWAGATION.redrawGrid();
+				})
 
-			$greenPinkRatioSlider.on( 'input', function(event) {
-    			$lblGreenPinkRatio.html( $greenPinkRatioSlider.val() );
-			});
+				$greenPinkRatioSlider.on( 'input', function(event) {
+	    			$lblGreenPinkRatio.html( $greenPinkRatioSlider.val() );
+				});
 
-			$greenPinkRatioSlider.change(function(){
-					SEGWAGATION.redrawGrid();
-			});
+				$greenPinkRatioSlider.change(function(){
+						SEGWAGATION.redrawGrid();
+				});
 
-			$emptySlider.on( 'input', function(event) {
-    			$lblEmpty.html( $emptySlider.val() );
-  		});
+				$emptySlider.on( 'input', function(event) {
+	    			$lblEmpty.html( $emptySlider.val() );
+	  		});
 
-			$emptySlider.change(function(){
-					SEGWAGATION.redrawGrid();
-			});
+				$emptySlider.change(function(){
+						SEGWAGATION.redrawGrid();
+				});
 
-			$similarSlider.on( 'input', function(event) {
-    			$lblSimilar.html( $similarSlider.val() );
-  		});
+				$similarSlider.on( 'input', function(event) {
+	    			$lblSimilar.html( $similarSlider.val() );
+	  		});
 
-			$delaySlider.on( 'input', function(event) {
-    			$lblDelay.html( $delaySlider.val() );
-  		});
+				$delaySlider.on( 'input', function(event) {
+	    			$lblDelay.html( $delaySlider.val() );
+	  		});
 
 
-			$('#reset').click(function() {
-					SEGWAGATION.redrawGrid();
-					timer = SEGWAGATION.stopTimer(timer);
-			});
+				$('#reset').click(function() {
+						SEGWAGATION.redrawGrid();
+						timer = SEGWAGATION.stopTimer(timer);
+				});
 
-			$('#step').click(function() {
-					SEGWAGATION.startSimulation();
-			});
+				$('#step').click(function() {
+						SEGWAGATION.startSimulation();
+				});
 
-			$('#start').click(function(){
-					timer = SEGWAGATION.startTimer(timer);
-			})
+				$('#start').click(function(){
+						timer = SEGWAGATION.startTimer(timer);
+				})
 
-			$('#stop').click(function(){
-					timer = SEGWAGATION.stopTimer(timer);
-			})
+				$('#stop').click(function(){
+						timer = SEGWAGATION.stopTimer(timer);
+				})
 
-	  });
+		  });
 
   </script>
 
@@ -271,6 +301,11 @@
   <button id="start">Start</button>
   <button id="stop">Stop</button>
   <button id="step">Step</button>
+	<br><br>
+	Dissatisfied: <label id="percent" text=""></label>
+	<br>
+	Round: <label id="roundLabel" text=""></label>
+
 
 
 </body>
