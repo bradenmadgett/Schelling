@@ -66,6 +66,15 @@
 					if(timer == null)
 					{
 					timer = setInterval(this.startSimulation, $('#delay').val()*100);
+					$('#similar').prop("disabled", true);
+					$('#green-pink-ratio').prop("disabled", true);
+					$('#empty').prop("disabled", true);
+					$('#size').prop("disabled", true);
+					$('#delay').prop("disabled", true);
+					$('#reset').prop("disabled", true);
+					$('#start').prop("disabled", true);
+					$('#step').prop("disabled", true);
+
 				  }
 					return timer;
 			},
@@ -76,6 +85,14 @@
 				{
 					clearInterval(timer);
 					timer = null;
+					$('#similar').prop("disabled", false);
+					$('#green-pink-ratio').prop("disabled", false);
+					$('#empty').prop("disabled", false);
+					$('#size').prop("disabled", false);
+					$('#delay').prop("disabled", false);
+					$('#reset').prop("disabled", false);
+					$('#start').prop("disabled", false);
+					$('#step').prop("disabled", false);
 				}
 				return timer;
 			},
@@ -201,6 +218,7 @@
 
 			$('#reset').click(function() {
 				SEGWAGATION.redrawGrid();
+				timer = SEGWAGATION.stopTimer(timer);
 			});
 
 			$('#step').click(function() {

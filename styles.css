@@ -8,15 +8,15 @@ html {
   float:left;
 width:600px;
 height:600px;
-border: 3px solid #FAE104;
+border: 1px solid #FAE104;
 border-collapse: collapse;
 margin-right: 10px;
 }
 #gameGrid tr td{
-border: 3px solid #FAE104;
+border: 1px solid #FAE104;
 }
 #gameGrid tr{
-border: 3px solid #FAE104;
+border: 1px solid #FAE104;
 }
 
 .AgentPink {
